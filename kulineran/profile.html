@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profil — KULINERAN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header" id="top">
+    <div class="wrap header-inner">
+      <a class="logo" href="index.html" aria-label="KULINERAN — beranda">
+        <span class="logo-mark" aria-hidden="true">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="19" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 15C12 15 14 11 20 11C26 11 28 15 28 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M11 20H29" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M13 20C13 20 13 27 20 27C27 27 27 20 27 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="logo-text">KULINERAN</span>
+      </a>
+
+      <nav class="main-nav" aria-label="Navigasi utama">
+        <a href="index.html#feed">Jelajahi</a>
+        <a href="index.html#cara-kerja">Cara Kerja</a>
+        <a href="index.html#tentang">Tentang</a>
+      </nav>
+
+      <div class="header-actions">
+        <div class="auth-user" id="authUser">
+          <a class="user-chip" href="profile.html" aria-label="Lihat profil pengguna">
+            <span class="user-avatar" id="userAvatar" aria-hidden="true">👤</span>
+            <span class="user-name" id="userName">Kamu</span>
+          </a>
+          <button class="btn btn-ghost header-auth-link" id="logoutBtn" type="button">Keluar</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="profile-shell">
+    <div class="wrap">
+      <section class="profile-card">
+        <div class="profile-avatar" id="profileAvatar">👤</div>
+        <div class="profile-meta">
+          <h1 id="profileName">Nama Pengguna</h1>
+          <div class="profile-handle" id="profileUsername">@username</div>
+        </div>
+        <button class="btn btn-primary" id="toggleEditBtn" type="button">Edit Profil</button>
+      </section>
+
+      <section class="profile-grid">
+        <aside class="profile-panel">
+          <div class="profile-info-list">
+            <div class="info-row">
+              <label>Username</label>
+              <strong id="infoUsername">@username</strong>
+            </div>
+            <div class="info-row">
+              <label>Nama</label>
+              <strong id="infoName">Nama lengkap</strong>
+            </div>
+            <div class="info-row">
+              <label>Email</label>
+              <strong id="infoEmail">email@example.com</strong>
+            </div>
+            <div class="info-row">
+              <label>Jumlah Postingan</label>
+              <strong id="infoPostCount">0</strong>
+            </div>
+          </div>
+        </aside>
+
+        <section class="profile-posts-panel">
+          <div class="profile-posts-head">
+            <h2 class="section-title">Postingan</h2>
+            <a class="btn btn-ghost" href="index.html#feed">Lihat etalase</a>
+          </div>
+          <div id="profilePosts" class="profile-posts-list"></div>
+        </section>
+      </section>
+
+      <section class="profile-edit-panel" id="profileEditPanel" hidden>
+        <h2 class="section-title">Edit Profil</h2>
+        <form id="profileEditForm" class="profile-edit-form">
+          <div class="profile-avatar-upload">
+            <div class="profile-avatar preview-avatar" id="previewAvatar">👤</div>
+            <label class="btn btn-ghost" for="avatarInput">Ganti foto profil</label>
+            <input type="file" id="avatarInput" accept="image/*" hidden>
+          </div>
+
+          <div class="field-grid">
+            <div class="field">
+              <label for="editName">Nama</label>
+              <input type="text" id="editName" name="editName" placeholder="Nama lengkap" required>
+            </div>
+            <div class="field">
+              <label for="editUsername">Username</label>
+              <input type="text" id="editUsername" name="editUsername" placeholder="username" required>
+            </div>
+            <div class="field field-full">
+              <label for="editEmail">Email</label>
+              <input type="email" id="editEmail" name="editEmail" placeholder="email@example.com" required>
+            </div>
+          </div>
+
+          <div class="profile-edit-actions">
+            <button class="btn btn-primary" type="submit">Simpan Perubahan</button>
+            <button class="btn btn-ghost" type="button" id="cancelEditBtn">Batal</button>
+          </div>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-bottom">
+      <p>&copy; 2026 KULINERAN. Dibuat buat yang laper mata.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    (() => {
+      const session = JSON.parse(localStorage.getItem('kulineran_session') || 'null');
+      if (!session || !session.loggedIn) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      const profileName = document.getElementById('profileName');
+      const profileUsername = document.getElementById('profileUsername');
+      const infoUsername = document.getElementById('infoUsername');
+      const infoName = document.getElementById('infoName');
+      const infoEmail = document.getElementById('infoEmail');
+      const infoPostCount = document.getElementById('infoPostCount');
+      const profileAvatar = document.getElementById('profileAvatar');
+      const previewAvatar = document.getElementById('previewAvatar');
+      const userName = document.getElementById('userName');
+      const userAvatar = document.getElementById('userAvatar');
+      const profilePosts = document.getElementById('profilePosts');
+      const logoutBtn = document.getElementById('logoutBtn');
+      const toggleEditBtn = document.getElementById('toggleEditBtn');
+      const cancelEditBtn = document.getElementById('cancelEditBtn');
+      const profileEditPanel = document.getElementById('profileEditPanel');
+      const profileEditForm = document.getElementById('profileEditForm');
+      const editNameInput = document.getElementById('editName');
+      const editUsernameInput = document.getElementById('editUsername');
+      const editEmailInput = document.getElementById('editEmail');
+      const avatarInput = document.getElementById('avatarInput');
+
+      function getProfileData() {
+        const current = JSON.parse(localStorage.getItem('kulineran_session') || 'null');
+        return {
+          name: current?.name || current?.displayName || 'Kamu',
+          username: current?.username || 'kamu',
+          email: current?.email || '',
+          avatar: current?.avatar || ''
+        };
+      }
+
+      function renderProfile() {
+        const current = getProfileData();
+        const displayName = current.name || 'Kamu';
+        const username = current.username || 'kamu';
+        const email = current.email || 'Belum ada email';
+
+        profileName.textContent = displayName;
+        profileUsername.textContent = '@' + username;
+        infoUsername.textContent = '@' + username;
+        infoName.textContent = displayName;
+        infoEmail.textContent = email;
+        userName.textContent = displayName;
+        editNameInput.value = displayName;
+        editUsernameInput.value = username;
+        editEmailInput.value = email === 'Belum ada email' ? '' : email;
+
+        const initials = displayName.trim().charAt(0).toUpperCase() || 'K';
+        const avatar = current.avatar;
+
+        if (avatar) {
+          profileAvatar.style.backgroundImage = 'url("' + avatar + '")';
+          profileAvatar.style.backgroundSize = 'cover';
+          profileAvatar.style.backgroundPosition = 'center';
+          profileAvatar.textContent = '';
+          previewAvatar.style.backgroundImage = 'url("' + avatar + '")';
+          previewAvatar.style.backgroundSize = 'cover';
+          previewAvatar.style.backgroundPosition = 'center';
+          previewAvatar.textContent = '';
+          userAvatar.style.backgroundImage = 'url("' + avatar + '")';
+          userAvatar.style.backgroundSize = 'cover';
+          userAvatar.style.backgroundPosition = 'center';
+          userAvatar.textContent = '';
+        } else {
+          profileAvatar.style.backgroundImage = 'none';
+          profileAvatar.textContent = initials;
+          previewAvatar.style.backgroundImage = 'none';
+          previewAvatar.textContent = initials;
+          userAvatar.style.backgroundImage = 'none';
+          userAvatar.textContent = initials;
+        }
+      }
+
+      function renderPosts() {
+        const current = getProfileData();
+        const username = current.username || 'kamu';
+        const posts = JSON.parse(localStorage.getItem('kulineran_posts') || '[]');
+        const userPosts = posts.filter((post) => {
+          const author = (post.authorUsername || post.user || '').replace(/^@/, '').toLowerCase();
+          const currentUser = username.toLowerCase();
+          const displayName = current.name || 'Kamu';
+          return author === currentUser || (post.authorName && post.authorName.toLowerCase() === displayName.toLowerCase()) || post.user === '@' + username || post.user === displayName;
+        });
+
+        infoPostCount.textContent = userPosts.length;
+
+        if (!userPosts.length) {
+          profilePosts.innerHTML = '<div class="empty-state">Belum ada postingan yang diupload oleh user ini.</div>';
+          return;
+        }
+
+        profilePosts.innerHTML = userPosts.map((post) => `
+          <article class="profile-post-item">
+            <h3>${post.title}</h3>
+            <div class="profile-post-meta">
+              <span>${post.category || 'umum'}</span>
+              <span>${post.time || 'baru saja'}</span>
+            </div>
+            <p>${post.desc}</p>
+          </article>
+        `).join('');
+      }
+
+      function saveSessionData(nextSession) {
+        const users = JSON.parse(localStorage.getItem('kulineran_users') || '[]');
+        const index = users.findIndex((user) => user.email && nextSession.email && user.email.toLowerCase() === nextSession.email.toLowerCase());
+
+        if (index >= 0) {
+          users[index] = {
+            ...users[index],
+            name: nextSession.name,
+            username: nextSession.username,
+            email: nextSession.email,
+            avatar: nextSession.avatar || users[index].avatar || ''
+          };
+        } else {
+          users.push({
+            name: nextSession.name,
+            username: nextSession.username,
+            email: nextSession.email,
+            avatar: nextSession.avatar || ''
+          });
+        }
+
+        localStorage.setItem('kulineran_users', JSON.stringify(users));
+        localStorage.setItem('kulineran_session', JSON.stringify(nextSession));
+      }
+
+      avatarInput.addEventListener('change', (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = () => {
+          const avatarData = String(reader.result);
+          const session = getProfileData();
+          const nextSession = {
+            ...JSON.parse(localStorage.getItem('kulineran_session') || '{}'),
+            name: session.name,
+            username: session.username,
+            email: session.email,
+            avatar: avatarData,
+            loggedIn: true,
+            displayName: session.name
+          };
+          saveSessionData(nextSession);
+          renderProfile();
+        };
+        reader.readAsDataURL(file);
+      });
+
+      profileEditForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const nextName = editNameInput.value.trim();
+        const nextUsername = editUsernameInput.value.trim().replace(/^@/, '');
+        const nextEmail = editEmailInput.value.trim();
+
+        if (!nextName || !nextUsername || !nextEmail) {
+          alert('Nama, username, dan email wajib diisi.');
+          return;
+        }
+
+        const current = getProfileData();
+        const nextSession = {
+          ...JSON.parse(localStorage.getItem('kulineran_session') || '{}'),
+          loggedIn: true,
+          name: nextName,
+          username: nextUsername,
+          email: nextEmail,
+          displayName: nextName,
+          avatar: current.avatar || ''
+        };
+
+        saveSessionData(nextSession);
+
+        const posts = JSON.parse(localStorage.getItem('kulineran_posts') || '[]');
+        const updatedPosts = posts.map((post) => {
+          if ((post.authorUsername || '').toLowerCase() === (current.username || 'kamu').toLowerCase() || (post.authorName || '').toLowerCase() === (current.name || 'kamu').toLowerCase()) {
+            return {
+              ...post,
+              authorUsername: nextUsername,
+              authorName: nextName,
+              authorEmail: nextEmail,
+              user: '@' + nextUsername
+            };
+          }
+          return post;
+        });
+        localStorage.setItem('kulineran_posts', JSON.stringify(updatedPosts));
+
+        renderProfile();
+        renderPosts();
+        profileEditPanel.hidden = true;
+      });
+
+      toggleEditBtn.addEventListener('click', () => {
+        profileEditPanel.hidden = !profileEditPanel.hidden;
+      });
+
+      cancelEditBtn.addEventListener('click', () => {
+        profileEditPanel.hidden = true;
+      });
+
+      logoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('kulineran_session');
+        window.location.href = 'login.html';
+      });
+
+      renderProfile();
+      renderPosts();
+    })();
+  </script>
+</body>
+</html>
